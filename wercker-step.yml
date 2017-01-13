@@ -1,0 +1,10 @@
+name: validate-replicas
+version: 0.0.1
+description: A public step for use with Wercker CI that will validate that all replicas are available.
+keywords:
+  - validate
+  - replica
+  - environment
+  - config
+  - application
+  - kubernetes
