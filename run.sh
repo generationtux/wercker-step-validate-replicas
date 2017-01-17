@@ -23,6 +23,8 @@ fi
 TIMEOUT_FLAG=0
 
 while : ; do
+    sleep .5
+
     if [ $TIMEOUT_FLAG -eq $WERCKER_VALIDATE_REPLICAS_TIMEOUT ] ; then
         echo "Kubernetes replica check failed."
         echo "Expected replicas: $REPLICAS, Available replicas: $AVAILABLE_REPLICAS"
@@ -33,7 +35,9 @@ while : ; do
     AVAILABLE_REPLICAS="$(kubectl get -o jsonpath='{.items[0].status.availableReplicas}' deployments --selector=app=$WERCKER_VALIDATE_REPLICAS_APP --namespace=${WERCKER_VALIDATE_REPLICAS_NAMESPACE:-default})"
 
     ((TIMEOUT_FLAG++))
-    sleep .5
+
+    echo "Expected replicas: $REPLICAS, Available replicas: $AVAILABLE_REPLICAS"
+    echo "Timeout $TIMEOUT_FLAG"
 
     [[ $REPLICAS -ne $AVAILABLE_REPLICAS ]] || break
 done

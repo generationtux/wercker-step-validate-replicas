@@ -1,5 +1,5 @@
 name: validate-replicas
-version: 0.0.2
+version: 0.0.3
 description: Validate the number of expected vs actual replicas after a Kubernetes deployment.
 keywords:
   - validate
