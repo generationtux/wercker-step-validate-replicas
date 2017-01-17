@@ -1,31 +1,21 @@
-# Validate Replicas 
+# Kubernetes Deployment Replica Validation
 
-A public step for use with Wercker CI that will validate that all replicas are available.
+Compare the number of expected Kubernetes replicas in the deployment against the number of available replicas.
 
-	- validate-replicas:
-		timeout: [SECONDS_TO_TIMEOUT]
-		app: [SERVICE_NAME]
-		namespace: [KUBECTL_NAMESPACE]
-		
-### Description
-```timeout:```
+## Usage
 
-Default: default. Namespace where the deployment lives. E.g. prod or default.
+```
+- gentux/validate-replicas:
+	timeout: [TIMEOUT IN SECONDS]
+	app: [metadata.name.labels.app]
+	namespace: [KUBERNETES NAMESPACE]
+```
 
-```app:```
+## Example
 
-The value of metadata.labels.app from the deployment config. E.g. prod-products or qa-products.
-
-```namespace:```
-
-Default: default. Namespace where the deployment lives. E.g. prod or default.
-
-### Example
-
-Say the Hurdy service is using kubenetes replicas and you are in a deploy to production pipeline.
-
-
-	- validate-replicas:
-		timeout: 120
-		app: prod-accounts
-		namespace: prod
+```
+- gentux/validate-replicas:
+	timeout: 60
+	app: qa-products
+	namespace: default
+```
