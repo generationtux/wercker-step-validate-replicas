@@ -16,8 +16,7 @@
 #        namespace: staging
 
 if [ $(which kubectl 2>/dev/null | grep -v "not found" | wc -l) -eq 0 ] ; then
-    echo "kubectl is not installed" &&
-    exit 1
+    fail "kubectl is not installed"
 fi
 
 TIMEOUT_FLAG=0
@@ -26,9 +25,8 @@ while : ; do
     sleep .5
 
     if [ $TIMEOUT_FLAG -eq $WERCKER_VALIDATE_REPLICAS_TIMEOUT ] ; then
-        echo "Kubernetes replica check failed."
-        echo "Expected replicas: $REPLICAS, Available replicas: $AVAILABLE_REPLICAS"
-        exit 1
+        info "Kubernetes replica check failed."
+        fail "Expected replicas: $REPLICAS, Available replicas: $AVAILABLE_REPLICAS"
     fi
 
     REPLICAS="$(kubectl get -o jsonpath='{.items[0].status.replicas}' deployments --selector=app=$WERCKER_VALIDATE_REPLICAS_APP --namespace=${WERCKER_VALIDATE_REPLICAS_NAMESPACE:-default})"
@@ -36,11 +34,10 @@ while : ; do
 
     ((TIMEOUT_FLAG++))
 
-    echo "Expected replicas: $REPLICAS, Available replicas: $AVAILABLE_REPLICAS"
-    echo "Timeout $TIMEOUT_FLAG"
+    info "Expected replicas: $REPLICAS, Available replicas: $AVAILABLE_REPLICAS"
+    info "Timeout $TIMEOUT_FLAG"
 
     [[ $REPLICAS -ne $AVAILABLE_REPLICAS ]] || break
 done
 
-echo "Expected replicas: $REPLICAS, Available replicas: $AVAILABLE_REPLICAS"
-exit 0
+success "Expected replicas: $REPLICAS, Available replicas: $AVAILABLE_REPLICAS"
